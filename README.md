@@ -11,7 +11,7 @@ A production-ready Next.js 16 real-time investment market engine with live dashb
 
 - **Real-time Dashboard** - Live investment portfolio tracking with 5 pre-configured companies
 - **Auto-Initialization** - Generates profit/loss data on first website visit automatically
-- **Enhanced API v2.0** - Detailed profit/loss history with last 5 transactions per company
+- **Enhanced API v2.0** - Detailed profit/loss history with last 10 transactions per company
 - **Embedded Widget** - Single-line script to add market engine to any external website
 - **Automated Market Updates** - Vercel Cron jobs update market data every 5 minutes
 - **Public API** - RESTful endpoints for external app integration (`/api/market-data`, `/api/market-engine/initialize`, `/api/market-engine/update`)
@@ -156,7 +156,7 @@ const data = await response.json();
 ```
 
 ### GET `/api/market-data`
-Returns all companies with current market data and last 5 profit/loss transactions.
+Returns all companies with current market data and last 10 profit/loss transactions per company.
 
 **Example Usage:**
 ```javascript
@@ -176,6 +176,8 @@ const data = await response.json();
     "time": "10:30:45 AM"
   },
   "total_companies": 5,
+  "profit_loss_history_limit_per_company": 10,
+  "total_profit_loss_history_returned": 50,
   "companies": [
     {
       "id": "uuid",
