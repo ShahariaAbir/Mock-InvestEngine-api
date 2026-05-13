@@ -1,7 +1,9 @@
-import { getSupabaseClient, Company } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase/client';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+
+const PROFIT_LOSS_HISTORY_LIMIT = 10;
 
 export async function GET(request: Request) {
   try {
@@ -24,7 +26,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // Fetch market logs for each company (last 5 entries per company)
+    // Fetch market logs for each company (last 10 entries per company)
     const companiesWithLogs = await Promise.all(
       (companies || []).map(async (company) => {
         const { data: logs, error: logsError } = await supabase
@@ -32,7 +34,7 @@ export async function GET(request: Request) {
           .select('*')
           .eq('company_id', company.id)
           .order('timestamp', { ascending: false })
-          .limit(5);
+          .limit(PROFIT_LOSS_HISTORY_LIMIT);
 
         return {
           id: company.id,
@@ -68,6 +70,11 @@ export async function GET(request: Request) {
           time: new Date().toLocaleTimeString('en-US'),
         },
         total_companies: companiesWithLogs.length,
+        profit_loss_history_limit_per_company: PROFIT_LOSS_HISTORY_LIMIT,
+        total_profit_loss_history_returned: companiesWithLogs.reduce(
+          (total, company) => total + company.profit_loss_history.length,
+          0
+        ),
         companies: companiesWithLogs,
       },
       {
