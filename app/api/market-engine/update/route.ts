@@ -1,29 +1,8 @@
+import { calculateScheduledROI } from '@/lib/market-schedule';
 import { getSupabaseClient, Company } from '@/lib/supabase/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-
-// Helper function to calculate random ROI
-function calculateROI(volatilityFactor: number): number {
-  // Random value between -5% and +8%, with slight bias toward profit
-  const random = Math.random();
-  
-  // Bias toward profit (70% chance of positive, 30% chance of negative)
-  let roi: number;
-  
-  if (random < 0.7) {
-    // Positive ROI: 0% to 8%
-    roi = Math.random() * 8;
-  } else {
-    // Negative ROI: -5% to 0%
-    roi = -Math.random() * 5;
-  }
-  
-  // Apply volatility factor
-  roi *= volatilityFactor;
-  
-  return parseFloat(roi.toFixed(2));
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,7 +40,8 @@ export async function POST(request: NextRequest) {
 
     // Process each company
     for (const company of companies as Company[]) {
-      const roi = calculateROI(company.volatility_factor);
+      const scheduledResult = calculateScheduledROI(company.name, company.volatility_factor);
+      const roi = scheduledResult.roi;
       const newCapital = company.current_capital * (1 + roi / 100);
       const changeAmount = newCapital - company.current_capital;
       
@@ -82,13 +62,17 @@ export async function POST(request: NextRequest) {
       logsToInsert.push({
         company_id: company.id,
         company_name: company.name,
-        event_type: roi > 0 ? 'profit' : 'loss',
+        event_type: scheduledResult.eventType,
         roi_percentage: roi,
         capital_before: company.current_capital,
         capital_after: parseFloat(newCapital.toFixed(2)),
         change_amount: parseFloat(changeAmount.toFixed(2)),
         timestamp: new Date().toISOString(),
       });
+
+      console.log(
+        `[Market Engine] ${company.name}: ${scheduledResult.scheduleReason}; current ${scheduledResult.gmtPlus6Time} GMT+6; generated ${scheduledResult.eventType} ROI ${roi}%`
+      );
     }
 
     // Update all companies in database
