@@ -27,7 +27,7 @@ export const MARKET_TIMEZONE_LABEL = 'GMT+6';
 const GMT_PLUS_6_OFFSET_MINUTES = 6 * 60;
 
 /**
- * ✏️ Edit this section to control company-specific daily profit/loss periods.
+ * âï¸ Edit this section to control company-specific daily profit/loss periods.
  *
  * All time values are interpreted as GMT+6 using 24-hour HH:mm format.
  * - mostlyProfit: during this time, the company has the configured chance to profit.
@@ -37,8 +37,8 @@ const GMT_PLUS_6_OFFSET_MINUTES = 6 * 60;
 export const COMPANY_MARKET_SCHEDULES: CompanyMarketSchedule[] = [
   {
     companyName: 'CocaCola',
-    mostlyProfit: [{ start: '08:00', end: '11:30', chance: 82 }],
-    mostlyLoss: [{ start: '19:00', end: '21:00', chance: 68 }],
+    mostlyProfit: [{ start: '08:00', end: '11:00', chance: 72 }],
+    mostlyLoss: [{ start: '11:00', end: '16:00', chance: 78 }],
   },
   {
     companyName: 'Nvadia',
