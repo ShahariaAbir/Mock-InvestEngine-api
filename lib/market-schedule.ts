@@ -57,8 +57,8 @@ export const COMPANY_MARKET_SCHEDULES: CompanyMarketSchedule[] = [
   },
   {
     companyName: 'Samsung',
-    mostlyProfit: [{ start: '20:00', end: '23:00', chance: 78 }],
-    mostlyLoss: [{ start: '11:30', end: '13:00', chance: 66 }],
+    mostlyProfit: [{ start: '23:00', end: '00:00', chance: 38 }],
+    mostlyLoss: [{ start: '11:30', end: '23:00', chance: 99 }],
   },
 ];
 
