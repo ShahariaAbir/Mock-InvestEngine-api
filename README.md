@@ -16,11 +16,29 @@ A production-ready Next.js 16 real-time investment market engine with live dashb
 - **Automated Market Updates** - Vercel Cron jobs update market data every 5 minutes
 - **Public API** - RESTful endpoints for external app integration (`/api/market-data`, `/api/market-engine/initialize`, `/api/market-engine/update`)
 - **Market Logs** - Track all profit/loss transactions with timestamps and exact times
+- **Company Time Biases** - Hardcoded GMT+6 windows make each company more likely to profit or lose during specific daily periods
 - **Countdown Timer** - Visual indicator showing time until next market update
 - **Test API Button** - Built-in API testing tool in dashboard
 - **Dark Theme** - Professional hacker-style interface with Tailwind CSS
 - **Row Level Security** - Supabase RLS policies for data protection
 - **Production Ready** - Fully configured for Vercel deployment
+
+
+## ⏰ Company Profit/Loss Time Biases
+
+Market updates use hardcoded company schedules from `lib/market-schedule.ts`. Edit the `COMPANY_MARKET_SCHEDULES` section to change company names, GMT+6 profit windows, GMT+6 loss windows, and chance percentages without adding any database table.
+
+Current configured companies:
+
+| Company | Mostly Profit Time (GMT+6) | Profit Chance | Mostly Loss Time (GMT+6) | Loss Chance |
+| --- | --- | ---: | --- | ---: |
+| CocaCola | 08:00-11:30 | 82% | 19:00-21:00 | 68% |
+| Nvadia | 13:00-16:30 | 88% | 02:00-04:30 | 72% |
+| Microsoft | 10:00-13:00 | 80% | 22:00-23:59 | 65% |
+| Apple | 16:00-18:30 | 84% | 05:00-07:00 | 70% |
+| Samsung | 20:00-23:00 | 78% | 11:30-13:00 | 66% |
+
+Outside configured windows, the engine uses the default 70% profit / 30% loss chance.
 
 ## 🚀 Quick Start
 

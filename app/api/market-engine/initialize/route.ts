@@ -1,22 +1,8 @@
-import { getSupabaseClient, Company } from '@/lib/supabase/client';
+import { calculateScheduledROI } from '@/lib/market-schedule';
+import { getSupabaseClient } from '@/lib/supabase/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-
-// Helper function to calculate random ROI
-function calculateROI(volatilityFactor: number): number {
-  const random = Math.random();
-  let roi: number;
-  
-  if (random < 0.7) {
-    roi = Math.random() * 8;
-  } else {
-    roi = -Math.random() * 5;
-  }
-  
-  roi *= volatilityFactor;
-  return parseFloat(roi.toFixed(2));
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,27 +28,38 @@ export async function POST(request: NextRequest) {
     const logs = [];
 
     for (const company of companies) {
-      const roi = calculateROI(company.volatility_factor);
+      const scheduledResult = calculateScheduledROI(company.name, company.volatility_factor);
+      const roi = scheduledResult.roi;
       const capitalBefore = company.current_capital;
       const changeAmount = (capitalBefore * roi) / 100;
       const capitalAfter = capitalBefore + changeAmount;
 
+      let status: 'Profit' | 'Loss' | 'Stable' = 'Stable';
+      if (roi > 0.5) status = 'Profit';
+      else if (roi < -0.5) status = 'Loss';
+
       updates.push({
         id: company.id,
-        current_capital: capitalAfter,
-        last_updated: new Date().toISOString(),
+        current_capital: parseFloat(capitalAfter.toFixed(2)),
+        status,
+        roi_percentage: roi,
+        last_update: new Date().toISOString(),
       });
 
       logs.push({
         company_id: company.id,
         company_name: company.name,
-        event_type: roi > 0 ? 'profit' : 'loss',
+        event_type: scheduledResult.eventType,
         roi_percentage: roi,
         capital_before: capitalBefore,
-        capital_after: capitalAfter,
-        change_amount: changeAmount,
+        capital_after: parseFloat(capitalAfter.toFixed(2)),
+        change_amount: parseFloat(changeAmount.toFixed(2)),
         timestamp: new Date().toISOString(),
       });
+
+      console.log(
+        `[Market Engine] ${company.name}: ${scheduledResult.scheduleReason}; current ${scheduledResult.gmtPlus6Time} GMT+6; generated ${scheduledResult.eventType} ROI ${roi}%`
+      );
     }
 
     // Update companies with new capital values
@@ -71,7 +68,10 @@ export async function POST(request: NextRequest) {
         .from('companies')
         .update({
           current_capital: update.current_capital,
-          last_updated: update.last_updated,
+          status: update.status,
+          roi_percentage: update.roi_percentage,
+          last_update: update.last_update,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', update.id);
 
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
         updates: updates.map((u) => ({
           company_id: u.id,
           new_capital: u.current_capital,
-          updated_at: u.last_updated,
+          updated_at: u.last_update,
         })),
       },
       {
