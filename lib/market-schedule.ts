@@ -27,7 +27,7 @@ export const MARKET_TIMEZONE_LABEL = 'GMT+6';
 const GMT_PLUS_6_OFFSET_MINUTES = 6 * 60;
 
 /**
- * Ã¢ÂÂÃ¯Â¸Â Edit this section to control company-specific daily profit/loss periods.
+ * ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Edit this section to control company-specific daily profit/loss periods.
  *
  * All time values are interpreted as GMT+6 using 24-hour HH:mm format.
  * - mostlyProfit: during this time, the company has the configured chance to profit.
@@ -42,18 +42,18 @@ export const COMPANY_MARKET_SCHEDULES: CompanyMarketSchedule[] = [
   },
   {
     companyName: 'Nvadia',
-    mostlyProfit: [{ start: '13:00', end: '16:30', chance: 88 }],
-    mostlyLoss: [{ start: '02:00', end: '04:30', chance: 72 }],
+    mostlyProfit: [{ start: '13:00', end: '14:30', chance: 88 }],
+    mostlyLoss: [{ start: '14:00', end: '22:30', chance: 92 }],
   },
   {
     companyName: 'Microsoft',
     mostlyProfit: [{ start: '10:00', end: '13:00', chance: 80 }],
-    mostlyLoss: [{ start: '22:00', end: '23:59', chance: 65 }],
+    mostlyLoss: [{ start: '14:00', end: '23:59', chance: 95 }],
   },
   {
     companyName: 'Apple',
-    mostlyProfit: [{ start: '16:00', end: '18:30', chance: 84 }],
-    mostlyLoss: [{ start: '05:00', end: '07:00', chance: 70 }],
+    mostlyProfit: [{ start: '00:00', end: '2:30', chance: 84 }],
+    mostlyLoss: [{ start: '05:00', end: '23:00', chance: 70 }],
   },
   {
     companyName: 'Samsung',
