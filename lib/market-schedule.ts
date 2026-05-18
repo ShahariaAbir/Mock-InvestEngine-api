@@ -27,7 +27,7 @@ export const MARKET_TIMEZONE_LABEL = 'GMT+6';
 const GMT_PLUS_6_OFFSET_MINUTES = 6 * 60;
 
 /**
- * ÃÂ¢ÃÂÃÂÃÂ¯ÃÂ¸ÃÂ Edit this section to control company-specific daily profit/loss periods.
+ * ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ Edit this section to control company-specific daily profit/loss periods.
  *
  * All time values are interpreted as GMT+6 using 24-hour HH:mm format.
  * - mostlyProfit: during this time, the company has the configured chance to profit.
@@ -38,31 +38,31 @@ export const COMPANY_MARKET_SCHEDULES: CompanyMarketSchedule[] = [
   {
     companyName: 'CocaCola',
     mostlyProfit: [{ start: '08:00', end: '11:00', chance: 72 }],
-    mostlyLoss: [{ start: '11:00', end: '16:00', chance: 95 }],
+    mostlyLoss: [{ start: '11:00', end: '23:50', chance: 95 }],
   },
   {
     companyName: 'Nvadia',
-    mostlyProfit: [{ start: '13:00', end: '14:30', chance: 88 }],
-    mostlyLoss: [{ start: '14:00', end: '22:30', chance: 92 }],
+    mostlyProfit: [{ start: '8:00', end: '9:00', chance: 68 }],
+    mostlyLoss: [{ start: '10:00', end: '22:30', chance: 99 }],
   },
   {
     companyName: 'Microsoft',
-    mostlyProfit: [{ start: '10:00', end: '13:00', chance: 80 }],
-    mostlyLoss: [{ start: '14:00', end: '23:59', chance: 95 }],
+    mostlyProfit: [{ start: '10:00', end: '11:00', chance: 80 }],
+    mostlyLoss: [{ start: '11:00', end: '23:59', chance: 95 }],
   },
   {
     companyName: 'Apple',
     mostlyProfit: [{ start: '00:00', end: '2:30', chance: 84 }],
-    mostlyLoss: [{ start: '05:00', end: '23:00', chance: 70 }],
+    mostlyLoss: [{ start: '05:00', end: '23:00', chance: 100 }],
   },
   {
     companyName: 'Samsung',
     mostlyProfit: [{ start: '23:00', end: '00:00', chance: 38 }],
-    mostlyLoss: [{ start: '11:30', end: '23:00', chance: 99 }],
+    mostlyLoss: [{ start: '9:30', end: '23:00', chance: 99 }],
   },
 ];
 
-const DEFAULT_PROFIT_CHANCE = 70;
+const DEFAULT_PROFIT_CHANCE = 30;
 
 function parseTimeToMinutes(time: string): number {
   const [hours, minutes] = time.split(':').map(Number);
